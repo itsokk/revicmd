@@ -1,5 +1,11 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import { useState } from 'react'
+
+function getCommand(cmd: any, option: any) {
+	return cmd[cmd.findIndex((item: any) => item.id == option)]
+}
+
 export default function Home( { cmd }: any ) {
   const [option, setoption] = useState(1)
   
@@ -13,21 +19,21 @@ export default function Home( { cmd }: any ) {
 		<select className="rounded-md bg-[#1b1b1d] text-white border-white border-2 w-1/4 h-10 my-4" value={option} onChange={(e) => {setoption(parseInt(e.target.value))}}>
   			{
 				cmd.map((command: any) => (
-					<option value={command.id}>{command.name}</option>
+					<option key={command.name} value={command.id}>{command.name}</option>
 				))
 			}
 		</select>
-		<p className="text-white text-xl px-16 whitespace-pre-wrap mb-4">{cmd[cmd.findIndex(item => item.id == option)].content}</p>
-		<img src={cmd[cmd.findIndex(item => item.id == option)].image} />
-		<p className="text-white text-xl mt-8">Created at: {cmd[cmd.findIndex(item => item.id == option)].createdAt}</p>
-		<p className="text-white text-xl">Last edit: {cmd[cmd.findIndex(item => item.id == option)].lastEdit}</p>	
-	  	<p className="text-white text-xl">Disabled: {cmd[cmd.findIndex(item => item.id == option)].disabled.toString()}</p>
+		<p className="text-white text-xl px-16 whitespace-pre-wrap mb-4">{getCommand(cmd, option).content}</p>
+		{(getCommand(cmd, option).image != null) && <Image src={getCommand(cmd, option).image} alt="" />}
+		<p className="text-white text-xl mt-8">Created at: {getCommand(cmd, option).createdAt}</p>
+		<p className="text-white text-xl">Last edit: {getCommand(cmd, option).lastEdit}</p>	
+	  	<p className="text-white text-xl">Disabled: {getCommand(cmd, option).disabled.toString()}</p>
 	  </main>
     </>
   )
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
 	const res = await fetch("https://hastebin.stasium.dev/raw/yvizotutek")
 	const cmd = await res.json()
 	return {
