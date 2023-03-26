@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 
 function getCommand(cmd: any, option: any) {
 	return cmd[cmd.findIndex((item: any) => item.id == option)]
@@ -23,8 +23,8 @@ export default function Home( { cmd }: any ) {
 				))
 			}
 		</select>
-		<p className="text-white text-xl px-16 whitespace-pre-wrap mb-4">{getCommand(cmd, option).content}</p>
-		{(getCommand(cmd, option).image != null) && <Image src={getCommand(cmd, option).image} alt="" />}
+		<ReactMarkdown className="text-white text-xl px-16 whitespace-pre-wrap mb-4">{getCommand(cmd, option).content}</ReactMarkdown>
+		<img src={getCommand(cmd, option).image} alt="" />
 		<p className="text-white text-xl mt-8">Created at: {getCommand(cmd, option).createdAt}</p>
 		<p className="text-white text-xl">Last edit: {getCommand(cmd, option).lastEdit}</p>	
 	  	<p className="text-white text-xl">Disabled: {getCommand(cmd, option).disabled.toString()}</p>
